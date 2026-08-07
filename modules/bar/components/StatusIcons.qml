@@ -47,13 +47,13 @@ StyledRect {
     implicitHeight: Tokens.sizes.bar.innerWidth
     implicitWidth: iconColumn.implicitWidth + Tokens.padding.medium * 2
 
-    ColumnLayout {
+    RowLayout {
         id: iconColumn
 
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: Tokens.padding.medium
+        anchors.right: parent.right
+        anchors.rightMargin: Tokens.padding.medium
 
         spacing: 0
 
@@ -151,27 +151,27 @@ StyledRect {
         required property int index
         property int margin: root.spacing / 2
         readonly property bool present: !root.collapsed(modelData)
-        property real topGap: present && index !== root.firstPresent ? margin : 0
-        property real bottomGap: present && index !== root.lastPresent ? margin : 0
+        property real leadGap: present && index !== root.firstPresent ? margin : 0
+        property real trailGap: present && index !== root.lastPresent ? margin : 0
         default property Item item
         property string name: modelData.id.toLowerCase()
 
-        Layout.topMargin: Math.round(topGap)
-        Layout.bottomMargin: Math.round(bottomGap)
-        Layout.alignment: Qt.AlignHCenter
+        Layout.leftMargin: Math.round(leadGap)
+        Layout.rightMargin: Math.round(trailGap)
+        Layout.alignment: Qt.AlignVCenter
 
         implicitWidth: item?.implicitWidth ?? 0
         implicitHeight: item?.implicitHeight ?? 0
 
         children: item
 
-        Behavior on topGap {
+        Behavior on leadGap {
             Anim {
                 type: Anim.SlowEffects
             }
         }
 
-        Behavior on bottomGap {
+        Behavior on trailGap {
             Anim {
                 type: Anim.SlowEffects
             }

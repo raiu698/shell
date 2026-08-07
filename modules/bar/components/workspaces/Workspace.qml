@@ -8,7 +8,7 @@ import qs.components
 import qs.services
 import qs.utils
 
-ColumnLayout {
+RowLayout {
     id: root
 
     required property int index
@@ -18,7 +18,7 @@ ColumnLayout {
 
     readonly property bool isWorkspace: true // Flag for finding workspace children
     // Unanimated prop for others to use as reference
-    readonly property int size: implicitHeight + (hasWindows ? Tokens.padding.extraSmall : 0)
+    readonly property int size: implicitWidth + (hasWindows ? Tokens.padding.extraSmall : 0)
 
     readonly property int ws: groupOffset + index + 1
     readonly property bool isOccupied: occupied[ws] ?? false
@@ -67,7 +67,7 @@ ColumnLayout {
         visible: active
         active: root.hasWindows
 
-        sourceComponent: Column {
+        sourceComponent: Row {
             spacing: 0
 
             add: Transition {
@@ -111,7 +111,7 @@ ColumnLayout {
         }
     }
 
-    Behavior on Layout.preferredHeight {
+    Behavior on Layout.preferredWidth {
         Anim {}
     }
 }

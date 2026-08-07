@@ -1,44 +1,38 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import Caelestia.Config
 import qs.components
 import qs.services
-import qs.utils
 
-RowLayout {
+StyledRect {
     id: root
 
     required property int index
     required property int activeWsId
     required property var occupied
     required property int groupOffset
+    required property ShellScreen screen
 
     readonly property bool isWorkspace: true // Flag for finding workspace children
-    // Unanimated prop for others to use as reference
-    readonly property int size: implicitWidth + (hasWindows ? Tokens.padding.extraSmall : 0)
 
     readonly property int ws: groupOffset + index + 1
     readonly property bool isOccupied: occupied[ws] ?? false
-    readonly property bool hasWindows: isOccupied && Config.bar.workspaces.showWindows
+    readonly property bool isActive: activeWsId === ws
 
-    Layout.alignment: Qt.AlignVCenter
-    Layout.preferredWidth: size
-
-    spacing: 0
+    implicitWidth: Tokens.sizes.bar.innerWidth - Tokens.padding.small
+    implicitHeight: Tokens.sizes.bar.innerWidth - Tokens.padding.small
+    radius: Tokens.rounding.full
+    color: isActive ? Colours.palette.m3primary : isOccupied ? Colours.layer(Colours.palette.m3surfaceContainerHigh, 2) : "transparent"
 
     StyledText {
-        id: indicator
-
-        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-        Layout.preferredWidth: Tokens.sizes.bar.innerWidth - Tokens.padding.small
+        anchors.centerIn: parent
 
         animate: true
         text: {
-            const ws = Hypr.workspaces.values.find(w => w.id === root.ws);
-            const wsName = !ws || ws.name == root.ws ? root.ws : ws.name[0];
+            const w = Hypr.workspaces.values.find(w => w.id === root.ws);
+            const wsName = !w || w.name == root.ws ? root.ws : w.name[0];
             let displayName = wsName.toString();
             if (Config.bar.workspaces.capitalisation.toLowerCase() === "upper") {
                 displayName = displayName.toUpperCase();
@@ -48,70 +42,19 @@ RowLayout {
             const label = Config.bar.workspaces.label || displayName;
             const occupiedLabel = Config.bar.workspaces.occupiedLabel || label;
             const activeLabel = Config.bar.workspaces.activeLabel || (root.isOccupied ? occupiedLabel : label);
-            return root.activeWsId === root.ws ? activeLabel : root.isOccupied ? occupiedLabel : label;
+            return root.isActive ? activeLabel : root.isOccupied ? occupiedLabel : label;
         }
-        color: Config.bar.workspaces.occupiedBg || root.isOccupied || root.activeWsId === root.ws ? Colours.palette.m3onSurface : Colours.layer(Colours.palette.m3outlineVariant, 2)
-        verticalAlignment: Qt.AlignVCenter
+        color: root.isActive ? Colours.palette.m3onPrimary : root.isOccupied ? Colours.palette.m3onSurface : Colours.layer(Colours.palette.m3outlineVariant, 2)
         font.family: Tokens.font.workspaces
     }
 
-    Loader {
-        id: windows
-
-        asynchronous: true
-
-        Layout.alignment: Qt.AlignVCenter
-        Layout.fillWidth: true
-        Layout.leftMargin: -Tokens.sizes.bar.innerWidth / 10
-
-        visible: active
-        active: root.hasWindows
-
-        sourceComponent: Row {
-            spacing: 0
-
-            add: Transition {
-                Anim {
-                    properties: "scale"
-                    from: 0
-                    to: 1
-                    easing: Tokens.anim.standardDecel
-                }
-            }
-
-            move: Transition {
-                Anim {
-                    properties: "scale"
-                    to: 1
-                    easing: Tokens.anim.standardDecel
-                }
-                Anim {
-                    properties: "x,y"
-                }
-            }
-
-            Repeater {
-                model: ScriptModel {
-                    values: {
-                        const ws = root.ws;
-                        const windows = Hypr.toplevels.values.filter(c => c.workspace?.id === ws);
-                        const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
-                        return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
-                    }
-                }
-
-                MaterialIcon {
-                    required property var modelData
-
-                    grade: 0
-                    text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
-                    color: Colours.palette.m3onSurfaceVariant
-                }
-            }
+    MouseArea {
+        anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
+        onClicked: {
+            if (root.isActive)
+                return;
+            Hypr.dispatch(Hypr.usingLua ? `hl.dsp.focus({ workspace = ${root.ws} })` : `workspace ${root.ws}`);
         }
-    }
-
-    Behavior on Layout.preferredWidth {
-        Anim {}
     }
 }

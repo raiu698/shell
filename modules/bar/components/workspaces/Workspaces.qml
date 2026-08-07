@@ -46,20 +46,6 @@ StyledClippingRect {
             blurMax: 32
         }
 
-        Loader {
-            asynchronous: true
-            active: Config.bar.workspaces.occupiedBg
-
-            anchors.fill: parent
-            anchors.margins: Tokens.padding.extraSmall
-
-            sourceComponent: OccupiedBg {
-                workspaces: workspaces
-                occupied: root.occupied
-                groupOffset: root.groupOffset
-            }
-        }
-
         RowLayout {
             id: layout
 
@@ -75,33 +61,8 @@ StyledClippingRect {
                     activeWsId: root.activeWsId
                     occupied: root.occupied
                     groupOffset: root.groupOffset
+                    screen: root.screen
                 }
-            }
-        }
-
-        Loader {
-            asynchronous: true
-            anchors.horizontalCenter: parent.horizontalCenter
-            active: Config.bar.workspaces.activeIndicator
-
-            sourceComponent: ActiveIndicator {
-                activeWsId: root.activeWsId
-                workspaces: workspaces
-                mask: layout
-                fullscreen: root.fullscreen
-            }
-        }
-
-        MouseArea {
-            anchors.fill: layout
-            onClicked: event => {
-                const ws = (layout.childAt(event.x, event.y) as Workspace)?.ws;
-                if (!ws)
-                    return;
-                if (Hypr.activeWsId !== ws)
-                    Hypr.dispatch(Hypr.usingLua ? `hl.dsp.focus({ workspace = "${ws}" })` : `workspace ${ws}`);
-                else
-                    Hypr.dispatch(Hypr.usingLua ? 'hl.dsp.workspace.toggle_special("special")' : "togglespecialworkspace special");
             }
         }
 

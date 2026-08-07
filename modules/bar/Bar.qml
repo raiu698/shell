@@ -10,7 +10,7 @@ import Caelestia.Config
 import qs.components
 import qs.services
 
-RowLayout {
+Item {
     id: root
 
     required property ShellScreen screen
@@ -101,14 +101,21 @@ RowLayout {
         }
     }
 
-    spacing: Tokens.spacing.medium
+    implicitWidth: entriesRow.implicitWidth
+    implicitHeight: entriesRow.implicitHeight
 
-    Repeater {
-        id: repeater
+    RowLayout {
+        id: entriesRow
 
-        model: ScriptModel {
-            values: root.Config.bar.entries.values.filter(e => e.enabled)
-        }
+        anchors.fill: parent
+        spacing: Tokens.spacing.medium
+
+        Repeater {
+            id: repeater
+
+            model: ScriptModel {
+                values: root.Config.bar.entries.values.filter(e => e.enabled)
+            }
 
         DelegateChooser {
             role: "id"
@@ -156,14 +163,6 @@ RowLayout {
                 }
             }
             DelegateChoice {
-                roleValue: "clock"
-                delegate: EntryWrapper {
-                    Clock {
-                        objectName: "taskbarClock"
-                    }
-                }
-            }
-            DelegateChoice {
                 roleValue: "statusIcons"
                 delegate: EntryWrapper {
                     StatusIcons {
@@ -181,6 +180,12 @@ RowLayout {
                 }
             }
         }
+        }
+    }
+
+    Clock {
+        objectName: "taskbarClock"
+        anchors.centerIn: parent
     }
 
     component EntryWrapper: Item {

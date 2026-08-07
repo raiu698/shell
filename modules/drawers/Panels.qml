@@ -71,6 +71,7 @@ Item {
         utilitiesPanel: utilities
 
         anchors.top: parent.top
+        anchors.topMargin: root.bar.implicitHeight
         anchors.right: parent.right
     }
 

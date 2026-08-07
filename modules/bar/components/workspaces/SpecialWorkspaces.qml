@@ -287,8 +287,8 @@ Item {
 
             asynchronous: true
 
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-            Layout.preferredHeight: Tokens.sizes.bar.innerWidth - Tokens.padding.small
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            Layout.preferredWidth: Tokens.sizes.bar.innerWidth - Tokens.padding.small
 
             sourceComponent: ws.icon.length === 1 ? letterComp : iconComp
 

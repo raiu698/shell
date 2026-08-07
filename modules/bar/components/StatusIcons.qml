@@ -44,8 +44,8 @@ StyledRect {
     radius: Tokens.rounding.full
 
     clip: true
-    implicitWidth: Tokens.sizes.bar.innerWidth
-    implicitHeight: iconColumn.implicitHeight + Tokens.padding.medium * 2
+    implicitHeight: Tokens.sizes.bar.innerWidth
+    implicitWidth: iconColumn.implicitWidth + Tokens.padding.medium * 2
 
     ColumnLayout {
         id: iconColumn

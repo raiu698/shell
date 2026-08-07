@@ -10,14 +10,14 @@ import Caelestia.Config
 import qs.components
 import qs.services
 
-ColumnLayout {
+RowLayout {
     id: root
 
     required property ShellScreen screen
     required property ScreenState screenState
     required property BarPopouts.Wrapper popouts
     required property bool fullscreen
-    readonly property int vPadding: Tokens.padding.large
+    readonly property int hPadding: Tokens.padding.large
 
     function closeTray(): void {
         if (!Config.bar.tray.compact)
@@ -189,9 +189,9 @@ ColumnLayout {
         default property Item item
         readonly property string entryId: modelData.id
 
-        Layout.topMargin: index === 0 ? root.vPadding : 0
-        Layout.bottomMargin: index === repeater.count - 1 ? root.vPadding : 0
-        Layout.alignment: Qt.AlignHCenter
+        Layout.leftMargin: index === 0 ? root.hPadding : 0
+        Layout.rightMargin: index === repeater.count - 1 ? root.hPadding : 0
+        Layout.alignment: Qt.AlignVCenter
 
         implicitWidth: item?.implicitWidth ?? 0
         implicitHeight: item?.implicitHeight ?? 0

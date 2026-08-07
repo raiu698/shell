@@ -27,8 +27,8 @@ StyledClippingRect {
 
     property real blur: onSpecial ? 1 : 0
 
-    implicitWidth: Tokens.sizes.bar.innerWidth
-    implicitHeight: layout.implicitHeight + Tokens.padding.small
+    implicitHeight: Tokens.sizes.bar.innerWidth
+    implicitWidth: layout.implicitWidth + Tokens.padding.small
 
     color: Colours.tPalette.m3surfaceContainer
     radius: Tokens.rounding.full
@@ -60,7 +60,7 @@ StyledClippingRect {
             }
         }
 
-        ColumnLayout {
+        RowLayout {
             id: layout
 
             anchors.centerIn: parent

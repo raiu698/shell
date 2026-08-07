@@ -300,7 +300,8 @@ StyledWindow {
             id: bar
 
             anchors.top: parent.top
-            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
 
             screen: root.screen
             screenState: root.screenState

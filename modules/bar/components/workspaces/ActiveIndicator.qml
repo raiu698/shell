@@ -43,9 +43,9 @@ StyledRect {
     }
 
     clip: true
-    y: offset + mask.y
-    implicitWidth: Tokens.sizes.bar.innerWidth - Tokens.padding.small
-    implicitHeight: size
+    x: offset + mask.x
+    implicitHeight: Tokens.sizes.bar.innerWidth - Tokens.padding.small
+    implicitWidth: size
     radius: Tokens.rounding.full
     color: Colours.palette.m3primary
 

@@ -28,12 +28,12 @@ Item {
         (content.item as Bar)?.closeTray();
     }
 
-    function checkPopout(y: real): void {
-        (content.item as Bar)?.checkPopout(y);
+    function checkPopout(x: real): void {
+        (content.item as Bar)?.checkPopout(x);
     }
 
-    function handleWheel(y: real, angleDelta: point): void {
-        (content.item as Bar)?.handleWheel(y, angleDelta);
+    function handleWheel(x: real, angleDelta: point): void {
+        (content.item as Bar)?.handleWheel(x, angleDelta);
     }
 
     clip: true

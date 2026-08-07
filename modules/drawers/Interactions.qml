@@ -54,8 +54,8 @@ CustomMouseArea {
     function onWheel(event: WheelEvent): void {
         if (fullscreen)
             return;
-        if (event.x < bar.implicitWidth) {
-            bar.handleWheel(event.y, event.angleDelta);
+        if (event.y < bar.implicitHeight) {
+            bar.handleWheel(event.x, event.angleDelta);
         }
     }
 
@@ -106,14 +106,14 @@ CustomMouseArea {
         }
 
         // Show bar in non-exclusive mode on hover
-        if (!screenState.bar && Config.bar.showOnHover && x < bar.clampedWidth)
+        if (!screenState.bar && Config.bar.showOnHover && y < bar.clampedHeight)
             bar.isHovered = true;
 
         // Show/hide bar on drag
-        if (pressed && dragStart.x < bar.clampedWidth) {
-            if (dragX > Config.bar.dragThreshold)
+        if (pressed && dragStart.y < bar.clampedHeight) {
+            if (dragY > Config.bar.dragThreshold)
                 screenState.bar = true;
-            else if (dragX < -Config.bar.dragThreshold)
+            else if (dragY < -Config.bar.dragThreshold)
                 screenState.bar = false;
         }
 
@@ -208,7 +208,7 @@ CustomMouseArea {
         }
 
         // Show dashboard on hover
-        const showDashboard = Config.dashboard.showOnHover && inTopPanel(panels.dashboard, x, y);
+        const showDashboard = Config.dashboard.showOnHover && inBottomPanel(panels.dashboard, x, y);
 
         // Always update visibility based on hover if not in shortcut mode
         if (!dashboardShortcutActive) {
@@ -219,10 +219,10 @@ CustomMouseArea {
         }
 
         // Show/hide dashboard on drag (for touchscreen devices)
-        if (pressed && inTopPanel(panels.dashboard, dragStart.x, dragStart.y) && withinPanelWidth(panels.dashboard, x, y)) {
-            if (dragY > Config.dashboard.dragThreshold)
+        if (pressed && inBottomPanel(panels.dashboard, dragStart.x, dragStart.y) && withinPanelWidth(panels.dashboard, x, y)) {
+            if (dragY < -Config.dashboard.dragThreshold)
                 screenState.dashboard = true;
-            else if (dragY < -Config.dashboard.dragThreshold)
+            else if (dragY > Config.dashboard.dragThreshold)
                 screenState.dashboard = false;
         }
 
@@ -238,8 +238,8 @@ CustomMouseArea {
         }
 
         // Show popouts on hover
-        if (x < bar.implicitWidth) {
-            bar.checkPopout(y);
+        if (y < bar.implicitHeight) {
+            bar.checkPopout(x);
         } else if ((!popouts.currentName.startsWith("traymenu") || ((popouts.current as StackView)?.depth ?? 0) <= 1) && !inLeftPanel(panels.popoutsWrapper, x, y)) {
             popouts.hasCurrent = false;
             bar.closeTray();
@@ -256,7 +256,7 @@ CustomMouseArea {
                 root.utilitiesShortcutActive = false;
 
                 // Also hide dashboard and OSD if they're not being hovered
-                const inDashboardArea = root.inTopPanel(root.panels.dashboard, root.mouseX, root.mouseY);
+                const inDashboardArea = root.inBottomPanel(root.panels.dashboard, root.mouseX, root.mouseY);
                 const inOsdArea = root.inRightPanel(root.panels.osdWrapper, root.mouseX, root.mouseY);
 
                 if (!inDashboardArea) {
@@ -272,7 +272,7 @@ CustomMouseArea {
         function onDashboardChanged() {
             if (root.screenState.dashboard) {
                 // Dashboard became visible, immediately check if this should be shortcut mode
-                const inDashboardArea = root.inTopPanel(root.panels.dashboard, root.mouseX, root.mouseY);
+                const inDashboardArea = root.inBottomPanel(root.panels.dashboard, root.mouseX, root.mouseY);
                 if (!inDashboardArea) {
                     root.dashboardShortcutActive = true;
                 }

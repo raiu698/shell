@@ -116,7 +116,7 @@ RowLayout {
             DelegateChoice {
                 roleValue: "spacer"
                 delegate: EntryWrapper {
-                    Layout.fillHeight: true
+                    Layout.fillWidth: true
                 }
             }
             DelegateChoice {

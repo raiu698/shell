@@ -10,6 +10,7 @@ Item {
 
     required property ShellScreen screen
     required property real borderThickness
+    required property real barThickness
 
     readonly property alias content: content
     property real offsetScale: x > 0 || content.hasCurrent ? 0 : 1
@@ -20,7 +21,7 @@ Item {
     implicitWidth: content.implicitWidth
     implicitHeight: content.implicitHeight * (1 - offsetScale)
 
-    y: content.isDetached ? (parent.height - content.nonAnimHeight) / 2 : 0
+    y: content.isDetached ? (parent.height - content.nonAnimHeight) / 2 : root.barThickness
     x: {
         if (content.isDetached)
             return (parent.width - content.nonAnimWidth) / 2;

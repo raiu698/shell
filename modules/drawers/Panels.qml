@@ -121,6 +121,7 @@ Item {
 
         screen: root.screen
         borderThickness: root.borderThickness
+        barThickness: root.bar.implicitHeight
     }
 
     Utilities.Wrapper {

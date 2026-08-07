@@ -80,7 +80,7 @@ Item {
                 }
             }
 
-            Behavior on y {
+            Behavior on x {
                 Anim {}
             }
 
